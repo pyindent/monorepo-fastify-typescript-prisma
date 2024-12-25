@@ -9,6 +9,5 @@
     { "path": "../utilities" }
   ],
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"] // Exclui arquivos que não devem ser recompilados
-
+  "exclude": ["node_modules", "dist"]
 }

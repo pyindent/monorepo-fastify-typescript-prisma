@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "start": "node dist/index.js",
-    "build": "tsc",
+    "build": "tsc --build",
     "test": "jest"
   },
   "dependencies": {
@@ -16,7 +16,7 @@
     "@fastify/jwt": "^7.2.4",
     "@fastify/multipart": "8",
     "@fastify/swagger": "^8.12.1",
-    "@fastify/swagger-ui": "^4.6.2",
+    "@fastify/swagger-ui": "^4.2.0",
     "@fastify/websocket": "^8.3.1",
     "@monorepo/services": "*",
     "@monorepo/utilities": "*",

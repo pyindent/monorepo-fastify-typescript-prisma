@@ -3,17 +3,14 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
+    "composite": true,
     "module": "NodeNext",
-    "moduleResolution": "node16",
-    "composite": true
+    "moduleResolution": "node16"
   },
   "references": [
     { "path": "../services" },
     { "path": "../utilities" }
   ],
-  "include": [
-    "src/**/*",
-    "src/types/fastify-jwt.d.ts"
-  ],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }

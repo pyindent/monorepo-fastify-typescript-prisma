@@ -1,10 +1,10 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist",       // Diretório onde os arquivos compilados serão colocados
-    "rootDir": "./src",       // Diretório de entrada dos arquivos TypeScript
-    "composite": true         // Necessário para projetos referenciados
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "composite": true
   },
-  "include": ["src/**/*"],     // Inclui apenas os arquivos TypeScript da pasta src
-  "exclude": ["node_modules", "dist"] // Exclui arquivos que não devem ser recompilados
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

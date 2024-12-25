@@ -13,17 +13,11 @@
     "composite": true,
     "baseUrl": ".",
     "paths": {
-      // Apontando para "dist": importa via "import ... from '@monorepo/services'"
-      //"@monorepo/services": ["packages/services/dist"],
-      //"@monorepo/utilities": ["packages/utilities/dist"],
-      // Se quiser usar diretamente de "src", mude para:
-       "@monorepo/services": ["packages/services/src"],
-       "@monorepo/utilities": ["packages/utilities/src"],
-      // -- OBS: nesse caso, cada sub-pacote precisa estar configurado com "declarationMap": true
-      // para que o debug/breakpoint funcione corretamente.
+      "@monorepo/utilities/*": ["packages/utilities/src/*"],
+      "@monorepo/services/*": ["packages/services/src/*"]
     }
   },
-  "include": ["packages/**/*"],
+  "include": ["packages/**/*", "__tests__/**/*"],
   "references": [
     { "path": "packages/utilities" },
     { "path": "packages/services" },
