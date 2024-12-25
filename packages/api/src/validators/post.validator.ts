@@ -1,3 +1,5 @@
+import { FastifyReply, FastifyRequest } from "fastify";
+
 // post.validator.ts
 export async function validatePostInput(
     request: FastifyRequest,

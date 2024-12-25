@@ -3,6 +3,6 @@ import { FastifyPluginAsync } from 'fastify';
 
 export const homeRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.get('/', async () => {
-    return { message: 'Hello from root!' };
+    return { message: 'Hello from root!!!' };
   });
 };

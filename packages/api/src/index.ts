@@ -1,5 +1,5 @@
-import { createServer } from './config/server';
-import { registerRoutes } from './routes/index';
+import { createServer } from './config/server.js';
+import { registerRoutes } from './routes/index.js';
 
 async function start() {
   const server = createServer();

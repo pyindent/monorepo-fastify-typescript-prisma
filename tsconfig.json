@@ -6,7 +6,7 @@
     "lib": ["ES2020"],
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "declaration": true,
@@ -25,8 +25,8 @@
   },
   "include": ["packages/**/*"],
   "references": [
-    { "path": "packages/services" },
     { "path": "packages/utilities" },
+    { "path": "packages/services" },
     { "path": "packages/api" }
   ]
 }

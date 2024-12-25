@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -7,23 +8,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+enum RoleFastify {
+  USER
+  ADMIN
+}
+
+model UserFastify {
   id        Int      @id @default(autoincrement())
   name      String
   email     String   @unique
   password  String
   avatar    String?
-  posts     Post[]
+  role      RoleFastify     @default(USER)  // <--- novo campo
+  posts     PostFastify[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Post {
+
+model PostFastify {
   id        Int      @id @default(autoincrement())
   title     String
   content   String
   userId    Int
-  user      User     @relation(fields: [userId], references: [id])
+  user      UserFastify     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

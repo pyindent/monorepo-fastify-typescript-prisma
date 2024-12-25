@@ -1,16 +1,21 @@
 import { FastifyPluginAsync } from 'fastify';
 import { UserService } from '@monorepo/services';
-import { authenticate, authorize } from '../middleware/auth';
+import { authenticate, authorize, authorizeRole } from '../middleware/auth.js';
 
 const userService = new UserService();
 
 export const userRoutes: FastifyPluginAsync = async (fastify) => {
   // Create user
-  fastify.post('/', async (request, reply) => {
-    const { name, email, password } = request.body as any;
-    const user = await userService.createUser({ name, email, password, avatar: null });
-    reply.code(201).send(user);
+  fastify.post('/', {
+    preHandler: [authenticate, authorizeRole(['ADMIN'])],
+    handler: async (request, reply) => {
+      const { name, email, password, role } = request.body as any;
+  
+      const user = await userService.createUser({ name, email, password, avatar: null, role });
+      reply.code(201).send(user);
+    }
   });
+  
 
   // Get user
   fastify.get('/:id', {

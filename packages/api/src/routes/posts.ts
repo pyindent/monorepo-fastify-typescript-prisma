@@ -1,8 +1,8 @@
 import { FastifyPluginAsync, FastifyRequest, FastifyReply } from 'fastify';
 import { PostService } from '@monorepo/services';
-import { authenticate, authorize } from '../middleware/auth';
-import { validatePostOwnership } from './middleware/post-ownership';
-import { validatePostInput } from '../validators/post.validator';
+import { authenticate, authorize } from '../middleware/auth.js';
+import { validatePostOwnership } from './middleware/post-ownership.js';
+import { validatePostInput } from '../validators/post.validator.js';
 
 const postService = new PostService();
 

@@ -7,10 +7,10 @@
   ],
   "scripts": {
     "dev": "tsx watch packages/api/src/index.ts",
-    "build": "yarn workspaces run build",
+    "build": "tsc -b",
     "test": "jest",
     "lint": "eslint .",
-    "start": "node packages/api/src/index.js",
+    "start": "node packages/api/dist/index.js",
     "clean": "rm -rf node_modules packages/*/node_modules packages/*/dist yarn.lock"
   },
   "devDependencies": {

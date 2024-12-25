@@ -14,3 +14,17 @@ export async function authorize(request: FastifyRequest, reply: FastifyReply) {
     reply.code(403).send({ error: 'Unauthorized' });
   }
 }
+
+export function authorizeRole(allowedRoles: string[]) {
+  return async function (request: FastifyRequest, reply: FastifyReply) {
+    const user = request.user;
+    if (!user) {
+      reply.code(403).send({ error: 'Unauthorized' });
+      return;
+    }
+    if (!allowedRoles.includes(user.role)) {
+      reply.code(403).send({ error: 'Forbidden: insufficient role' });
+      return;
+    }
+  };
+}
