@@ -33,8 +33,7 @@ export class PostService {
 
   async getPostsByUserId(userId: number): Promise<PostFastify[]> {
     return prisma.postFastify.findMany({
-      where: { userId },
-      include: { user: true },
+      where: { userId }
     });
   }
 }

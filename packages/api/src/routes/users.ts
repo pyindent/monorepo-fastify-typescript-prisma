@@ -1,8 +1,11 @@
 import { FastifyPluginAsync } from 'fastify';
-import { UserService } from '@monorepo/services';
+import { UserService, PostService, S3Service } from '@monorepo/services';
 import { authenticate, authorize, authorizeRole } from '../middleware/auth.js';
 
 const userService = new UserService();
+const postService = new PostService();
+const s3Service = new S3Service();
+
 
 export const userRoutes: FastifyPluginAsync = async (fastify) => {
   // Create user
@@ -42,6 +45,30 @@ export const userRoutes: FastifyPluginAsync = async (fastify) => {
     },
   });
 
+  fastify.patch('/:id/upload-avatar', {
+    preHandler: [authenticate, authorizeRole(['ADMIN'])], // ver se quer ou authorizeRole
+    handler: async (request, reply) => {
+      const { id } = request.params as { id: string };
+      const user = await userService.getUserById(Number(id));
+      if (!user) {
+        return reply.code(404).send({ error: 'User not found' });
+      }
+
+      // Lê o arquivo do body multipart:
+      const file = await request.file(); 
+      if (!file) {
+        return reply.code(400).send({ error: 'No file uploaded' });
+      }
+
+      // Faz upload para S3:
+      const s3Url = await s3Service.uploadFile(await file.toBuffer(), file.filename, file.mimetype);
+
+      // Atualiza user.avatar:
+      const updatedUser = await userService.updateUser(Number(id), { avatar: s3Url });
+      reply.send(updatedUser);
+    }
+  });
+
   // Delete user
   fastify.delete('/:id', {
     preHandler: [authenticate, authorize],
@@ -51,4 +78,14 @@ export const userRoutes: FastifyPluginAsync = async (fastify) => {
       reply.code(204).send();
     },
   });
+
+  fastify.get('/:id/posts', {
+    preHandler: [authenticate],
+    handler: async (request, reply) => {
+      const { id } = request.params as { id: string };
+      const posts = await postService.getPostsByUserId(Number(id));
+      reply.send(posts);
+    },
+  });
+  
 };

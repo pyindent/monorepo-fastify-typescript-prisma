@@ -1,5 +1,6 @@
 import { createServer } from './config/server.js';
 import { registerRoutes } from './routes/index.js';
+import 'dotenv/config';
 
 async function start() {
   const server = createServer();

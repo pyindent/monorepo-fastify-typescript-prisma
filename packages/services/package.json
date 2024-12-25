@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "@monorepo/utilities": "*",
-    "@prisma/client": "^5.7.1"
+    "@prisma/client": "^5.7.1",
+    "aws-sdk": "^2.1692.0"
   },
   "devDependencies": {
     "prisma": "^5.7.1",
