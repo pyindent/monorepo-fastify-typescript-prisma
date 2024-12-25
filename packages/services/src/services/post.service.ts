@@ -1,7 +1,6 @@
-import { PrismaClient, PostFastify } from '@prisma/client';
 import { NotificationService } from './notification.service.js';
-
-const prisma = new PrismaClient();
+import { prisma } from '../prisma.js';
+import { PostFastify } from '@prisma/client';
 
 export class PostService {
   // Cria um novo post

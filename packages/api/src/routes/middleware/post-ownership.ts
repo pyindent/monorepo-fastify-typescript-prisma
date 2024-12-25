@@ -1,5 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { PostService } from '@monorepo/services';
+import { RoleFastify } from '@prisma/client';
 
 const postService = new PostService();
 
@@ -22,8 +23,8 @@ export async function validatePostOwnership(
     return;
   }
 
-  if (post.userId !== user.id) {
-    reply.code(403).send({ error: 'You do not have permission to modify this post' });
+  if (user.role !== RoleFastify.ADMIN && post.userId !== user.id) {
+    reply.code(403).send({ error: 'You do not have permission to delete this post' });
     return;
   }
 }

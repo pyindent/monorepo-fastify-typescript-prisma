@@ -1,9 +1,8 @@
-import { PrismaClient, UserFastify, RoleFastify } from '@prisma/client';
+import { UserFastify, RoleFastify } from '@prisma/client';
 import { hashPassword, comparePassword } from '@monorepo/utilities';
 import { NotificationService } from './notification.service.js';
 import { S3Service } from './s3.service.js';
-
-const prisma = new PrismaClient();
+import { prisma } from '../prisma.js';
 
 export class UserService {
   private s3Service = new S3Service();
@@ -105,11 +104,26 @@ export class UserService {
   
 
   // Deleta um usuário pelo ID
-  async deleteUser(id: number): Promise<void> {
-    await prisma.userFastify.delete({
-      where: { id },
-    });
-
-    NotificationService.broadcastEvent('user.deleted', { id });
+// packages/services/src/services/user.service.ts
+async deleteUser(id: number): Promise<void> {
+  const user = await this.getUserById(id);
+  if (!user) {
+    throw new Error(`User with ID ${id} not found`);
   }
+
+  // Excluir avatar do S3, se existir
+  if (user.avatar) {
+    const avatarKey = user.avatar.split('/').pop();
+    if (avatarKey) {
+      await this.s3Service.deleteFile(avatarKey);
+    }
+  }
+
+  await prisma.userFastify.delete({
+    where: { id },
+  });
+
+  NotificationService.broadcastEvent('user.deleted', { id });
+}
+
 }

@@ -1,21 +1,26 @@
-// packages/api/src/services/notifications.service.ts
+// packages/services/src/services/notification.service.ts
+import { SocketStream } from '@fastify/websocket';
 
-export const connections: any[] = []; // Exporta conexões para uso global
+class NotificationService {
+  private static connections: Set<SocketStream> = new Set();
 
-// Serviço para gerenciar conexões e enviar notificações
-export class NotificationService {
-  static addConnection(connection: any): void {
-    connections.push(connection);
+  static addConnection(connection: SocketStream): void {
+    this.connections.add(connection);
+    console.log(`New connection added. Total: ${this.connections.size}`);
   }
 
-  static removeConnection(connection: any): void {
-    const idx = connections.indexOf(connection);
-    if (idx !== -1) connections.splice(idx, 1);
+  static removeConnection(connection: SocketStream): void {
+    this.connections.delete(connection);
+    console.log(`Connection removed. Total: ${this.connections.size}`);
   }
 
   static broadcastEvent(event: string, data: any): void {
-    for (const conn of connections) {
-      conn.socket.send(JSON.stringify({ event, data }));
-    }
+    const payload = JSON.stringify({ event, data });
+    this.connections.forEach((conn) => {
+      conn.socket.send(payload);
+    });
+    console.log(`Broadcast event '${event}' to ${this.connections.size} connections.`);
   }
 }
+
+export { NotificationService };

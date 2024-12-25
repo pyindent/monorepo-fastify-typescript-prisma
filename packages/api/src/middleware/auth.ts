@@ -8,7 +8,7 @@ export async function authenticate(request: FastifyRequest, reply: FastifyReply)
     const user = await request.jwtVerify() as FastifyJWT['user'];
     request.user = user; // Popula `request.user` com o tipo correto
   } catch (err) {
-    reply.code(401).send({ error: 'Unauthorized' });
+    reply.code(401).send({ error: 'Authentication failed' });
   }
 }
 
