@@ -1,15 +1,21 @@
 import { PrismaClient, PostFastify } from '@prisma/client';
+import { NotificationService } from './notification.service.js';
 
 const prisma = new PrismaClient();
 
 export class PostService {
+  // Cria um novo post
   async createPost(data: Omit<PostFastify, 'id' | 'createdAt' | 'updatedAt'>): Promise<PostFastify> {
-    return prisma.postFastify.create({
+    const post = await prisma.postFastify.create({
       data,
-      include: { user: true },
     });
+
+    // Notifica a criação do post
+    NotificationService.broadcastEvent('post.created', post);
+    return post;
   }
 
+  // Busca um post pelo ID
   async getPostById(id: number): Promise<PostFastify | null> {
     return prisma.postFastify.findUnique({
       where: { id },
@@ -17,23 +23,44 @@ export class PostService {
     });
   }
 
+  // Atualiza um post existente
   async updatePost(id: number, data: Partial<PostFastify>): Promise<PostFastify> {
-    return prisma.postFastify.update({
+    // Verifica se o post existe antes de atualizar
+    const existingPost = await this.getPostById(id);
+    if (!existingPost) {
+      throw new Error(`Post with ID ${id} not found`);
+    }
+
+    const updatedPost = await prisma.postFastify.update({
       where: { id },
       data,
-      include: { user: true },
     });
+
+    // Notifica a atualização do post
+    NotificationService.broadcastEvent('post.updated', updatedPost);
+    return updatedPost;
   }
 
-  async deletePost(id: number): Promise<PostFastify> {
-    return prisma.postFastify.delete({
+  // Deleta um post pelo ID
+  async deletePost(id: number): Promise<void> {
+    // Verifica se o post existe antes de deletar
+    const existingPost = await this.getPostById(id);
+    if (!existingPost) {
+      throw new Error(`Post with ID ${id} not found`);
+    }
+
+    await prisma.postFastify.delete({
       where: { id },
     });
+
+    // Notifica a deleção do post
+    NotificationService.broadcastEvent('post.deleted', { id });
   }
 
+  // Busca posts por ID de usuário
   async getPostsByUserId(userId: number): Promise<PostFastify[]> {
     return prisma.postFastify.findMany({
-      where: { userId }
+      where: { userId },
     });
   }
 }

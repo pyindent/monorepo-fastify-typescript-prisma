@@ -17,7 +17,7 @@ model UserFastify {
   role      RoleFastify   @default(USER)
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
-  posts     PostFastify[]
+  posts     PostFastify[]  @relation("UserPosts")
 }
 
 model PostFastify {
@@ -27,7 +27,7 @@ model PostFastify {
   userId    Int
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
-  user      UserFastify @relation(fields: [userId], references: [id])
+  user     UserFastify @relation("UserPosts", fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum RoleFastify {

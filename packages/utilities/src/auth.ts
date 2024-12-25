@@ -1,9 +1,17 @@
-import { createHash } from 'crypto';
+import bcrypt from 'bcrypt';
 
+// Hash de senha com bcrypt
 export async function hashPassword(password: string): Promise<string> {
-  return createHash('sha256').update(password).digest('hex');
+  const saltRounds = 10; // Número de rounds de salt
+  return bcrypt.hash(password, saltRounds);
 }
 
+// Comparação de senha usando bcrypt
+export async function comparePassword(plainPassword: string, hashedPassword: string): Promise<boolean> {
+  return bcrypt.compare(plainPassword, hashedPassword);
+}
+
+// Validação de email
 export function validateEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);

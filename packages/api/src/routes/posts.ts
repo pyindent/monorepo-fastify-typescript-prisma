@@ -1,3 +1,4 @@
+// packages/api/src/routes/posts.ts
 import { FastifyPluginAsync, FastifyRequest, FastifyReply } from 'fastify';
 import { PostService } from '@monorepo/services';
 import { authenticate, authorize } from '../middleware/auth.js';
@@ -11,22 +12,27 @@ export const postRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.post('/', {
     preHandler: [authenticate, validatePostInput],
     handler: async (request: FastifyRequest, reply: FastifyReply) => {
-      const { title, content, userId } = request.body as any;
+      const { title, content } = request.body as { title: string; content: string };
+      const userId = request.user.id; // Obtém o userId a partir do token de autenticação
+  
+      // Cria o post usando o userId autenticado
       const post = await postService.createPost({ title, content, userId });
+  
       reply.code(201).send(post);
     }
   });
+  
 
   // Get post by id
   fastify.get('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
     const { id } = request.params as { id: string };
     const post = await postService.getPostById(parseInt(id));
-    
+
     if (!post) {
       reply.code(404).send({ error: 'Post not found' });
       return;
     }
-    
+
     reply.send(post);
   });
 
@@ -37,6 +43,7 @@ export const postRoutes: FastifyPluginAsync = async (fastify) => {
       const { id } = request.params as { id: string };
       const data = request.body as any;
       const post = await postService.updatePost(parseInt(id), data);
+
       reply.send(post);
     }
   });
@@ -47,18 +54,8 @@ export const postRoutes: FastifyPluginAsync = async (fastify) => {
     handler: async (request: FastifyRequest, reply: FastifyReply) => {
       const { id } = request.params as { id: string };
       await postService.deletePost(parseInt(id));
+
       reply.code(204).send();
     }
   });
 };
-
-// Handler logic from update.ts
-
-
-// Handler logic from get.ts
-
-
-// Handler logic from delete.ts
-
-
-// Handler logic from create.ts

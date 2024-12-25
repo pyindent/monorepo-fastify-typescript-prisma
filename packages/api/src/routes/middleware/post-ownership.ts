@@ -8,7 +8,12 @@ export async function validatePostOwnership(
   reply: FastifyReply
 ) {
   const { id } = request.params as { id: string };
-  const user = request.user; // Supondo que o usuário está autenticado e disponível no objeto `request`
+  const user = request.user; // Usuário autenticado
+
+  if (!user) {
+    reply.code(401).send({ error: 'Unauthorized' });
+    return;
+  }
 
   const post = await postService.getPostById(parseInt(id));
 
@@ -17,8 +22,9 @@ export async function validatePostOwnership(
     return;
   }
 
-  if (post.userId !== user?.id) {
+  if (post.userId !== user.id) {
     reply.code(403).send({ error: 'You do not have permission to modify this post' });
     return;
   }
 }
+
