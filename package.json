@@ -13,6 +13,8 @@
     "test:utilities": "jest packages/utilities --config packages/utilities/jest.config.mjs --coverage",
     "test:services": "jest packages/services --config packages/services/jest.config.mjs --coverage",
     "test:api": "jest packages/api --config packages/api/jest.config.mjs --coverage",
+    "docker:run:prod": "docker run -p 3001:3001 node-monorepo",
+    "docker:build:prod": "docker build -t node-monorepo .",
     "lint": "eslint .",
     "start": "node packages/api/dist/index.js",
     "clean": "rm -rf node_modules packages/*/node_modules packages/*/dist yarn.lock"
