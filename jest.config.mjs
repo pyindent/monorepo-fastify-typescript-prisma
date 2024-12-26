@@ -14,7 +14,7 @@ export default {
     '^(\\.{1,2}/.*)\\.js$': '$1',
     '^@monorepo/utilities$': '<rootDir>/packages/utilities/src',
   },
-  testMatch: ['**/__tests__/**/*.spec.ts'],
+  testMatch: ['**/*.spec.ts'],
   moduleFileExtensions: ['ts', 'js', 'json', 'node'],
   transformIgnorePatterns: ['/node_modules/(?!bcrypt)/'],
 

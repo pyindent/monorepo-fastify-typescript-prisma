@@ -1,7 +1,7 @@
 // packages/api/src/routes/users.ts
 import { FastifyPluginAsync } from 'fastify';
 import { UserService, PostService } from '@monorepo/services';
-import { authenticate, authorize, authorizeRole } from '../middleware/auth.js';
+import { authenticate, authorize, authorizeRole } from './middleware/auth.js';
 
 const userService = new UserService();
 const postService = new PostService();
@@ -20,7 +20,7 @@ export const userRoutes: FastifyPluginAsync = async (fastify) => {
 
   // Get user
   fastify.get('/:id', {
-    preHandler: [authenticate],
+    preHandler: [authenticate, authorize],
     handler: async (request, reply) => {
       const { id } = request.params as { id: string };
       const user = await userService.getUserById(Number(id));
@@ -69,7 +69,7 @@ export const userRoutes: FastifyPluginAsync = async (fastify) => {
 
   // Get user's posts
   fastify.get('/:id/posts', {
-    preHandler: [authenticate],
+    preHandler: [authenticate, authorize],
     handler: async (request, reply) => {
       const { id } = request.params as { id: string };
       const posts = await postService.getPostsByUserId(Number(id));

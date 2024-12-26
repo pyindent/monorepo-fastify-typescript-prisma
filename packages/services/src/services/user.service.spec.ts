@@ -1,11 +1,11 @@
-import { UserService } from '../user.service.js';
-import { prisma } from '../../prisma.js';
-import { NotificationService } from '../notification.service.js';
-import { S3Service } from '../s3.service.js';
+import { UserService } from './user.service.js';
+import { prisma } from '../prisma.js';
+import { NotificationService } from './notification.service.js';
+import { S3Service } from './s3.service.js';
 import { hashPassword, comparePassword } from '@monorepo/utilities';
 import { RoleFastify } from '@prisma/client';
 
-jest.mock('../../prisma.js', () => ({
+jest.mock('../prisma.js', () => ({
   prisma: {
     userFastify: {
       create: jest.fn(),
@@ -16,8 +16,8 @@ jest.mock('../../prisma.js', () => ({
   },
 }));
 
-jest.mock('../notification.service.js');
-jest.mock('../s3.service.js');
+jest.mock('./notification.service.js');
+jest.mock('./s3.service.js');
 jest.mock('@monorepo/utilities');
 
 describe('UserService', () => {

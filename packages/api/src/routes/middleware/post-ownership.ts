@@ -17,7 +17,7 @@ export async function validatePostOwnership(
   }
 
   const post = await postService.getPostById(parseInt(id));
-
+  
   if (!post) {
     reply.code(404).send({ error: 'Post not found' });
     return;

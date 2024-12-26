@@ -1,7 +1,7 @@
 // packages/api/src/routes/posts.ts
 import { FastifyPluginAsync, FastifyRequest, FastifyReply } from 'fastify';
 import { PostService } from '@monorepo/services';
-import { authenticate, authorize } from '../middleware/auth.js';
+import { authenticate, authorize } from './middleware/auth.js';
 import { validatePostOwnership } from './middleware/post-ownership.js';
 
 const postService = new PostService();

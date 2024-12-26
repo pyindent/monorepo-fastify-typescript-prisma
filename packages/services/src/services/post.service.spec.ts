@@ -1,8 +1,8 @@
-import { PostService } from '../post.service.js';
-import { prisma } from '../../prisma.js';
-import { NotificationService } from '../notification.service.js';
+import { PostService } from './post.service.js';
+import { prisma } from '../prisma.js';
+import { NotificationService } from './notification.service.js';
 
-jest.mock('../../prisma.js', () => ({
+jest.mock('../prisma.js', () => ({
   prisma: {
     postFastify: {
       create: jest.fn(),
@@ -14,7 +14,7 @@ jest.mock('../../prisma.js', () => ({
   },
 }));
 
-jest.mock('../notification.service.js');
+jest.mock('./notification.service.js');
 
 describe('PostService', () => {
   const postService = new PostService();

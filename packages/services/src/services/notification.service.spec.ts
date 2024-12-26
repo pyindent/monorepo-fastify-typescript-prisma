@@ -1,4 +1,4 @@
-import { NotificationService } from '../notification.service.js';
+import { NotificationService } from './notification.service.js';
 
 describe('NotificationService', () => {
   let mockConnection: any;

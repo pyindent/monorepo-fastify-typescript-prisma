@@ -10,6 +10,9 @@
     "dev": "tsx watch packages/api/src/index.ts",
     "build": "tsc -b",
     "test": "jest --config jest.config.mjs --coverage",
+    "test:utilities": "jest packages/utilities --config packages/utilities/jest.config.mjs --coverage",
+    "test:services": "jest packages/services --config packages/services/jest.config.mjs --coverage",
+    "test:api": "jest packages/api --config packages/api/jest.config.mjs --coverage",
     "lint": "eslint .",
     "start": "node packages/api/dist/index.js",
     "clean": "rm -rf node_modules packages/*/node_modules packages/*/dist yarn.lock"
