@@ -10,7 +10,44 @@ import multipart from '@fastify/multipart';
 export function createServer() {
   const server = fastify({
     logger: true,
+    ajv: {
+      customOptions: { allErrors: true, strict: false }, // Configurações para capturar todos os erros
+    },
   });
+
+  // Configuração global de tratamento de erros
+  server.setErrorHandler((error, request, reply) => {
+    console.error('Error Handler Invoked:', error);
+  
+    if (error.validation) {
+      // Processa os erros de validação
+      const errors = error.validation.map((err) => {
+        const field = err.instancePath
+          ? err.instancePath.replace(/^\//, '') // Remove a barra inicial
+          : err.params?.missingProperty || 'unknown'; // Usa "unknown" como fallback
+  
+        return {
+          field,
+          message: err.message,
+        };
+      });
+  
+      console.log('Formatted Validation Errors:', errors);
+  
+      // Força o envio da resposta
+      reply.status(400).send({ errors });
+      return; // Garante que não há mais execução após enviar a resposta
+    }
+  
+    // Tratamento genérico para outros erros
+    reply.status(error.statusCode || 500).send({
+      error: error.message || 'Internal Server Error',
+    });
+  });
+  
+  
+  
+  
 
   // Registra plugins
   server.register(cors);
@@ -28,20 +65,27 @@ export function createServer() {
         description: 'Fastify Node Monorepo API',
         version: '1.0.0',
       },
-      servers: [
-        { url: `http://localhost:3001}` }, // Porta dinâmica
-      ],
+      components: {
+        securitySchemes: {
+          BearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT',
+          },
+        },
+      },
+      security: [{ BearerAuth: [] }],
     },
   });
-
+  
   server.register(fastifySwaggerUi, {
     routePrefix: '/documentation',
     uiConfig: {
       docExpansion: 'full',
       deepLinking: false,
     },
-    initOAuth: {},
   });
+  
 
   return server;
 }
