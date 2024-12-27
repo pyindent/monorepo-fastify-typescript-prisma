@@ -608,10 +608,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/ws/notifications/broadcast",
+							"raw": "{{base_url}}/ws/notifications/broadcast",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
 							"port": "3000",
 							"path": [
@@ -629,7 +629,7 @@
 	"variable": [
 		{
 			"key": "base_url",
-			"value": "localhost:3000",
+			"value": "https://d3mzz2lkm6w1h4.cloudfront.net",
 			"type": "string"
 		},
 		{
